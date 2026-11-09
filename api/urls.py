@@ -14,5 +14,6 @@ urlpatterns = [
     path('draft/', draft_view, name='draft'),
     path('waivers/', waivers_view, name='waivers'),
     path('conflicts/', conflict_view, name='conflicts'),
+     path('register/', register_view, name='register'),
     path('', include(router.urls)),
 ]
