@@ -8,7 +8,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Environment Variables-il ninnu edukkunnu. Illenkil default values use cheyyum.
 SECRET_KEY = config("SECRET_KEY", default="django-insecure-dev-key-cutthroat-cup")
 DEBUG = config("DEBUG", default=True, cast=bool)
-ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="127.0.0.1,localhost", cast=Csv())
+
+# ALLOWED_HOSTS ' * ' aakki maatti. Ithu vazhi Render-il ninnu varunna ellam requests allow aakum.
+ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="*", cast=Csv())
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -29,7 +31,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware", # <-- ADDED FOR STATIC FILES (Render)
+    "whitenoise.middleware.WhiteNoiseMiddleware", # <-- FOR STATIC FILES (Render)
     "corsheaders.middleware.CorsMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -105,12 +107,17 @@ REST_FRAMEWORK = {
 }
 
 # ─── CORS (Cross-Origin Resource Sharing) ───
-# Deploy kazhinjal Vercel-inte URL koodi ivide add cheyyam
 CORS_ALLOWED_ORIGINS = config(
     "CORS_ALLOWED_ORIGINS",
     default="http://localhost:5173,http://127.0.0.1:5173",
     cast=Csv(),
 )
 
-# Ithu temporary aayi True aakkam, pakshe pinne False aakkuka
 CORS_ALLOW_ALL_ORIGINS = config("CORS_ALLOW_ALL_ORIGINS", default=True, cast=bool)
+
+# ─── CSRF TRUSTED ORIGINS (Django Admin-ine Render-il open cheyyan) ───
+CSRF_TRUSTED_ORIGINS = config(
+    "CSRF_TRUSTED_ORIGINS",
+    default="https://*.onrender.com,http://localhost:5173",
+    cast=Csv(),
+)
